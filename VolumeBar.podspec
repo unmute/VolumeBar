@@ -11,6 +11,5 @@ Pod::Spec.new do |s|
   s.source_files = 'Source/*.swift'
   s.requires_arc = true
   s.frameworks = 'Foundation', 'UIKit', 'CoreGraphics', 'QuartzCore'
-  s.screenshot  = 'https://github.com/gizmosachin/VolumeBar/raw/master/VolumeBar.gif'
   s.documentation_url = 'http://gizmosachin.github.io/VolumeBar/docs'
 end
