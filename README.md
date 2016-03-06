@@ -2,9 +2,7 @@
 
 ## VolumeBar
 
-`VolumeBar` is a simple iOS volume indicator written in [Swift](https://developer.apple.com/swift/). 
-
-It shines in content-heavy apps by showing at the top of the screen and not obstructing content. A basic implementation is just one line of code, but `VolumeBar` can be heavily customized via several appearance and presentation properties.
+`VolumeBar` is a [Swift](https://developer.apple.com/swift/) volume indicator that doesn't obstruct content on screen. A basic implementation is just one line of code, but it can be heavily customized via several appearance and presentation properties.
 
 ### Features
 - [x] Customizable appearance
@@ -16,7 +14,7 @@ It shines in content-heavy apps by showing at the top of the screen and not obst
 
 ## Usage
 
-A basic implementation of  `VolumeBar` is just one line of code.
+A basic implementation of `VolumeBar` is just one line of code.
 
 ```swift
 VolumeBar.sharedInstance.start()
