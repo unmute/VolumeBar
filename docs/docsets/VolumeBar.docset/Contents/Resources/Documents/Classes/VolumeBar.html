@@ -266,7 +266,21 @@
                       <div class="abstract">
                         <p>The height of the internal bar.</p>
 
-<p>See documentation for <code>updateHeight()</code> for more about how the actual height of the <code><a href="../Classes/VolumeBar.html">VolumeBar</a></code> is calculated.</p>
+<p>See <code>updateHeight()</code>. The height of the <code><a href="../Classes/VolumeBar.html">VolumeBar</a></code> is set as follows:</p>
+
+<p><a href='#in_portrait_mode' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='in_portrait_mode'>In portrait mode:</h3></p>
+
+<ul>
+<li>If <code><a href="../Classes/VolumeBar.html#/s:vC9VolumeBar9VolumeBar15statusBarHiddenSb">statusBarHidden</a></code> = <code>false</code>: 20</li>
+<li>If <code><a href="../Classes/VolumeBar.html#/s:vC9VolumeBar9VolumeBar15statusBarHiddenSb">statusBarHidden</a></code> = <code>true</code> : <code>barHeight</code> + 6</li>
+</ul>
+
+<p><a href='#in_landscape_mode' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='in_landscape_mode'>In landscape mode:</h3></p>
+
+<ul>
+<li>If the <code>rootViewController</code> of the key window is a <code>UINavigationController</code>: the height of the navigation bar</li>
+<li>Otherwise: <code>barHeight</code> + 6</li>
+</ul>
 
                       </div>
                       <div class="declaration">
