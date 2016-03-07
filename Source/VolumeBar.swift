@@ -82,7 +82,14 @@ public class VolumeBar: NSObject {
 	
 	/// The height of the internal bar.
 	///
-	/// See documentation for `updateHeight()` for more about how the actual height of the `VolumeBar` is calculated.
+	/// See `updateHeight()`. The height of the `VolumeBar` is set as follows:
+	/// ### In portrait mode:
+	/// - If `statusBarHidden` = `false`: 20
+	/// - If `statusBarHidden` = `true` : `barHeight` + 6
+	///
+	/// ### In landscape mode:
+	/// - If the `rootViewController` of the key window is a `UINavigationController`: the height of the navigation bar
+	/// - Otherwise: `barHeight` + 6
 	public var barHeight: CGFloat = 2.0 {
 		didSet {
 			updateHeight()
@@ -237,14 +244,7 @@ public class VolumeBar: NSObject {
 	
 	/// Updates the height of the `VolumeBar` according to the `barHeight` and other factors.
 	///
-	/// The height of the `VolumeBar` is set as follows:
-	/// ### In portrait mode:
-	/// - If `statusBarHidden` = `false`: 20
-	/// - If `statusBarHidden` = `true` : `barHeight` + 6
-	///
-	/// ### In landscape mode:
-	/// - If the `rootViewController` of the key window is a `UINavigationController`: the height of the navigation bar
-	/// - Otherwise: `barHeight` + 6
+	/// See documentation for `barHeight` for details.
 	internal func updateHeight() {
 		guard let mainWindow = UIApplication.sharedApplication().keyWindow else { return }
 		
