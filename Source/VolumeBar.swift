@@ -200,6 +200,10 @@ public class VolumeBar: NSObject {
 		volumeWindow.windowLevel = UIWindowLevelStatusBar + 1
 	}
 	
+	deinit {
+		AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: "outputVolume")
+	}
+	
 	// MARK: - Automatic Presentation
 	
 	/// Start observing changes in volume.
