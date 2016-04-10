@@ -20,14 +20,23 @@ A basic implementation of `VolumeBar` is just one line of code.
 VolumeBar.sharedInstance.start()
 ```
 
+By default, adding `VolumeBar` to your app will cause background audio to pause when your app is opened. To prevent this, add the following line of code wherever you call the `start` method:
+
+```swift
+try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+```
+
 Calling the `start` method begins observing changes in the system volume. After calling `start`, `VolumeBar` will show automatically whenever your app is active and the volume changes. This is appropriate for most use cases. To stop observing changes, call `stop`:
 
 ```swift
 VolumeBar.sharedInstance.stop()
 ```
+
+[Please see the documentation](http://gizmosachin.github.io/VolumeBar/docs) and check out the sample app (VolumeBarSample) for more details.
+
 ****
 
-##### Appearance:
+##### Appearance
 
 Customize tint color, bar tint color, and track tint color:
 
@@ -75,8 +84,6 @@ VolumeBar.sharedInstance.statusBarHidden = false
 VolumeBar.sharedInstance.statusBarStyle = .LightContent
 ```
 
-[Please see the documentation](http://gizmosachin.github.io/VolumeBar/docs) and check out the sample app (VolumeBarSample) for more details.
-
 ## Installation
 
 ### CocoaPods
@@ -90,7 +97,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :iOS, '9.0'
 use_frameworks!
 
-pod 'VolumeBar', '~> 1.0'
+pod 'VolumeBar', '~> 1.0.2'
 ```
 
 ### Carthage
