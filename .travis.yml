@@ -9,5 +9,5 @@ before_install:
   - brew reinstall xctool
 script:
   - xcodebuild -showsdks
-  - xctool -project VolumeBar/VolumeBar.xcodeproj -scheme VolumeBar -sdk iphonesimulator9.2 build analyze
+  - xctool -project VolumeBar/VolumeBar.xcodeproj -scheme VolumeBar -sdk iphonesimulator9.3 build analyze
 
