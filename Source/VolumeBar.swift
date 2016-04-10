@@ -221,10 +221,10 @@ public class VolumeBar: NSObject {
 			AVAudioSession.sharedInstance().addObserver(self, forKeyPath: "outputVolume", options: [.Old, .New], context: nil)
 			
 			// Observe when application resumes from background
-			NSNotificationCenter.defaultCenter().addObserver(self, selector: "applicationDidBecomeActive:", name: UIApplicationDidBecomeActiveNotification, object: nil)
+			NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
 			
 			// Observe device rotation
-			NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateHeight", name: UIDeviceOrientationDidChangeNotification, object: nil)
+			NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(VolumeBar.updateHeight), name: UIDeviceOrientationDidChangeNotification, object: nil)
 		}
 	}
 	
@@ -324,7 +324,7 @@ public class VolumeBar: NSObject {
 		
 		// Invalidate the timer and extend the on-screen duration.
 		hideTimer?.invalidate()
-		hideTimer = NSTimer.scheduledTimerWithTimeInterval(hideDuration, target: self, selector: "hide", userInfo: nil, repeats: false)
+		hideTimer = NSTimer.scheduledTimerWithTimeInterval(hideDuration, target: self, selector: #selector(VolumeBar.hide), userInfo: nil, repeats: false)
 	}
 	
 	/// Hides the `VolumeBar`.

@@ -57,7 +57,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 		view.addSubview(subtitleLabel)
 		
 		configureStyles()
-		segmentedControl.addTarget(self, action: "update", forControlEvents: .ValueChanged)
+		segmentedControl.addTarget(self, action: #selector(ViewController.update), forControlEvents: .ValueChanged)
 		segmentedControl.selectedSegmentIndex = 0
 		view.addSubview(segmentedControl)
 		
