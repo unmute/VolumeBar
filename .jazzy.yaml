@@ -2,6 +2,7 @@ module: VolumeBar
 module_name: VolumeBar
 author: Sachin Patel
 author_url: https://gizmosachin.com
+readme_path: ./clone/README.md
 github_url: https://github.com/gizmosachin/VolumeBar
 github-file-prefix: https://github.com/gizmosachin/VolumeBar/tree/master
 root-url: https://gizmosachin.github.io/VolumeBar/docs
