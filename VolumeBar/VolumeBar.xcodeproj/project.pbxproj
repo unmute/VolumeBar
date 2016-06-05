@@ -13,7 +13,7 @@
 /* Begin PBXFileReference section */
 		031FFF921C8C148300879183 /* VolumeBar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VolumeBar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		031FFFAD1C8C166B00879183 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
-		031FFFB11C8C16A300879183 /* VolumeBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VolumeBar.swift; path = ../Source/VolumeBar.swift; sourceTree = "<group>"; };
+		031FFFB11C8C16A300879183 /* VolumeBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VolumeBar.swift; path = ../Sources/VolumeBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

@@ -19,7 +19,7 @@
 		03D35F4B1C8A2FD40053F91E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = VolumeBarSample/Info.plist; sourceTree = "<group>"; };
 		03F739281C8C248000A12BAA /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = VolumeBarSample/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		03F739291C8C248000A12BAA /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = VolumeBarSample/ViewController.swift; sourceTree = SOURCE_ROOT; };
-		03F7392C1C8C248700A12BAA /* VolumeBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VolumeBar.swift; path = ../Source/VolumeBar.swift; sourceTree = "<group>"; };
+		03F7392C1C8C248700A12BAA /* VolumeBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VolumeBar.swift; path = ../Sources/VolumeBar.swift; sourceTree = "<group>"; };
 		03F7392E1C8C249700A12BAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = VolumeBarSample/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		03F739311C8C249E00A12BAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = VolumeBarSample/Base.lproj/LaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
