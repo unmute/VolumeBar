@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'VolumeBar'
-  s.version = '1.0.2'
+  s.version = '1.0.3'
   s.summary = 'Volume indicator that doesn\'t obstruct content.'
   s.homepage = 'http://github.com/gizmosachin/VolumeBar'
   s.license = 'MIT'
@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.author = { 'Sachin Patel' => 'me@gizmosachin.com' }
   s.source = { :git => 'https://github.com/gizmosachin/VolumeBar.git', :tag => s.version }
   s.ios.deployment_target = '9.0'
-  s.source_files = 'Source/*.swift'
+  s.source_files = 'Sources/*.swift'
   s.requires_arc = true
   s.frameworks = 'Foundation', 'UIKit', 'CoreGraphics', 'QuartzCore'
   s.documentation_url = 'http://gizmosachin.github.io/VolumeBar/docs'

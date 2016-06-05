@@ -110,7 +110,7 @@ github "gizmosachin/VolumeBar" "master"
 
 ### Swift Package Manager
 
-Installation is also available using the [Swift Package Manager](https://swift.org/package-manager/). To integrate, add the following line to your `Package.swift`:
+Installation is also available using the [Swift Package Manager](https://swift.org/package-manager/). To integrate, add the following to your `Package.swift`:
 
 ```swift
 import PackageDescription
