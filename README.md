@@ -68,7 +68,7 @@ VolumeBar.sharedInstance.hide()
 Change the animation style:
 
 ```swift
-VolumeBar.sharedInstance.animationStyle = .Fade // default is .Slide
+VolumeBar.sharedInstance.animationStyle = .fade // default is .slide
 VolumeBar.sharedInstance.animationDuration = 0.5
 VolumeBar.sharedInstance.minimumVisibleDuration = 2.0
 ```
