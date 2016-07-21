@@ -55,7 +55,7 @@ public class VolumeBar: NSObject {
 	}
 	
 	/// The shared instance of `VolumeBar`. This should be used in most cases.
-	static let sharedInstance = VolumeBar()
+	public static let sharedInstance = VolumeBar()
 	
 	/// The delegate must adopt the `VolumeDelegate` protocol.
 	public var delegate: VolumeDelegate?
