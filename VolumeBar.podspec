@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'VolumeBar'
-  s.version = '1.0.3'
+  s.version = '1.0.4'
   s.summary = 'Volume indicator that doesn\'t obstruct content.'
   s.homepage = 'http://github.com/gizmosachin/VolumeBar'
   s.license = 'MIT'

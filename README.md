@@ -97,7 +97,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :iOS, '9.0'
 use_frameworks!
 
-pod 'VolumeBar', '~> 1.0.2'
+pod 'VolumeBar', '~> 1.0.4'
 ```
 
 ### Carthage
