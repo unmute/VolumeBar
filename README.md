@@ -42,7 +42,7 @@ Customize tint color, bar tint color, and track tint color:
 
 ```swift
 VolumeBar.sharedInstance.tintColor = UIColor.whiteColor()
-VolumeBar.sharedInstance.barTintColor = UIColor.blackColor().colorWithAlphaComponent(0.5)
+VolumeBar.sharedInstance.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.5)
 VolumeBar.sharedInstance.trackTintColor = UIColor.clearColor()
 ```
 
@@ -94,7 +94,7 @@ To integrate, add the following to your `Podfile`:
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-platform :iOS, '9.0'
+platform :iOS, '8.0'
 use_frameworks!
 
 pod 'VolumeBar', '~> 1.0.6'
