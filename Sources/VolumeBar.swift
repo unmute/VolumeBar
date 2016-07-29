@@ -153,6 +153,9 @@ public class VolumeBar: NSObject {
 	
 	// MARK: Internal
 	
+	/// A Boolean value that reflects whether the `VolumeBar` should resume when the app enters from the background.
+	private var shouldResume: Bool = false
+	
 	/// A Boolean value that reflects whether the `VolumeBar` is currently observing system volume changes.
 	private var observingVolumeChanges: Bool = false
 	
@@ -201,7 +204,10 @@ public class VolumeBar: NSObject {
 	}
 	
 	deinit {
-		AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: "outputVolume")
+		if observingVolumeChanges {
+			AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: "outputVolume")
+			NSNotificationCenter.defaultCenter().removeObserver(self)
+		}
 	}
 	
 	// MARK: - Automatic Presentation
@@ -224,7 +230,8 @@ public class VolumeBar: NSObject {
 			// Observe volume changes
 			AVAudioSession.sharedInstance().addObserver(self, forKeyPath: "outputVolume", options: [.Old, .New], context: nil)
 			
-			// Observe when application resumes from background
+			// Observe when application enters and resumes from background
+			NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UIApplicationDelegate.applicationWillResignActive(_:)), name: UIApplicationWillResignActiveNotification, object: nil)
 			NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
 			
 			// Observe device rotation
@@ -238,11 +245,10 @@ public class VolumeBar: NSObject {
 	/// are pressed. Calling this method has no effect if `start()` hasn't previously been called.
 	public func stop() {
 		if observingVolumeChanges {
+			observingVolumeChanges = false
+			
 			// Stop observing volume changes
 			AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: "outputVolume")
-			
-			// Stop observing application changes and device rotation
-			NSNotificationCenter.defaultCenter().removeObserver(self)
 		}
 	}
 	
@@ -370,12 +376,23 @@ public class VolumeBar: NSObject {
 	}
 	
 	
-	/// Observe when the application becomes active.
-	public func applicationDidBecomeActive(notification: NSNotification) {
-		
-		// Restart session after entering from the background
+	/// Observe when the application background state changes.
+	public func applicationWillResignActive(notification: NSNotification) {
+		// Stop session when entering background
 		if observingVolumeChanges {
-			observingVolumeChanges = false
+			// Set flag to only resume if `start()` was previously called
+			shouldResume = true
+			
+			stop()
+		}
+	}
+	
+	public func applicationDidBecomeActive(notification: NSNotification) {
+		// Restart session after becoming active
+		if shouldResume {
+			// Reset background flag
+			shouldResume = false
+			
 			start()
 		}
 	}
