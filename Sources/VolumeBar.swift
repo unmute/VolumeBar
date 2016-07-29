@@ -162,6 +162,9 @@ public class VolumeBar: NSObject {
 	/// A `UIWindow` that is inserted above the system status bar to show the volume indicator.
 	private let volumeWindow: UIWindow = UIWindow()
 	
+	/// A standard iOS `MPVolumeView` that never appears but is necessary to hide the system volume HUD.
+	private let volumeView = MPVolumeView()
+	
 	/// A timer that controls when the `VolumeBar` automatically hides.
 	///
 	/// Each time a volume button is pressed, the timer is invalidated and set again with duration `minimumVisibleDuration`.
@@ -201,6 +204,10 @@ public class VolumeBar: NSObject {
 		volumeWindow.backgroundColor = nil
 		volumeWindow.rootViewController = volumeViewController
 		volumeWindow.windowLevel = UIWindowLevelStatusBar + 1
+		
+		// Set up internal MPVolumeView
+		volumeView.clipsToBounds = true
+		volumeView.frame = CGRect.zero
 	}
 	
 	deinit {
@@ -219,6 +226,8 @@ public class VolumeBar: NSObject {
 	public func start() {
 		if !observingVolumeChanges {
 			observingVolumeChanges = true
+			
+			UIApplication.sharedApplication().windows.first?.addSubview(volumeView)
 			
 			// Initialize the audio session
 			do {
@@ -249,6 +258,8 @@ public class VolumeBar: NSObject {
 			
 			// Stop observing volume changes
 			AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: "outputVolume")
+			
+			volumeView.removeFromSuperview()
 		}
 	}
 	
@@ -431,17 +442,6 @@ private class VolumeBarViewController: UIViewController {
 	}
 	
 	// MARK: - View lifecycle
-	
-	/// Called when the view is loaded.
-	private override func viewDidLoad() {
-		super.viewDidLoad()
-		
-		// A non-hidden MPVolumeView is needed to prevent the system volume HUD from showing.
-		let volumeView = MPVolumeView()
-		volumeView.clipsToBounds = true
-		volumeView.frame = CGRect.zero
-		UIApplication.sharedApplication().windows.first?.addSubview(volumeView)
-	}
 	
 	/// Performs internal layout.
 	private override func viewDidLayoutSubviews() {
