@@ -26,7 +26,7 @@ By default, adding `VolumeBar` to your app will cause background audio to pause 
 try! AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
 ```
 
-Calling the `start` method begins observing changes in the system volume. After calling `start`, `VolumeBar` will show automatically whenever your app is active and the volume changes. This is appropriate for most use cases. To stop observing changes, call `stop`:
+Calling the `start` method begins observing changes in the system volume. After calling `start`, `VolumeBar` will show automatically whenever your app is active and the volume changes. This is appropriate for most use cases. To stop observing changes and use the system volume HUD again, call `stop`:
 
 ```swift
 VolumeBar.sharedInstance.stop()
@@ -97,7 +97,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :iOS, '8.0'
 use_frameworks!
 
-pod 'VolumeBar', '~> 1.0.6'
+pod 'VolumeBar', '~> 1.1'
 ```
 
 ### Carthage
