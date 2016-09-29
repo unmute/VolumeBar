@@ -126,7 +126,7 @@ public final class VolumeBar: NSObject {
 	/// The tint color of the `VolumeBar`.
 	///
 	/// This value controls the tint color of the internal bar that reflects the volume level.
-	public var tintColor: UIColor = UIColor.black() {
+	public var tintColor: UIColor = UIColor.black {
 		didSet {
 			volumeViewController.view.tintColor = tintColor
 			volumeViewController.refresh()
@@ -136,7 +136,7 @@ public final class VolumeBar: NSObject {
 	/// The background color of the `VolumeBar`.
 	///
 	/// This value controls the background color of the `VolumeBar`.
-	public var backgroundColor: UIColor = UIColor.white() {
+	public var backgroundColor: UIColor = UIColor.white {
 		didSet {
 			volumeViewController.view.backgroundColor = backgroundColor
 		}
@@ -145,7 +145,7 @@ public final class VolumeBar: NSObject {
 	/// The track color of the `VolumeBar`.
 	///
 	/// This value controls the background color of the track.
-	public var trackTintColor: UIColor = UIColor.black().withAlphaComponent(0.1) {
+	public var trackTintColor: UIColor = UIColor.black.withAlphaComponent(0.1) {
 		didSet {
 			volumeViewController.trackView.backgroundColor = trackTintColor
 		}
@@ -160,7 +160,7 @@ public final class VolumeBar: NSObject {
 	private var observingVolumeChanges: Bool = false
 	
 	/// A `UIWindow` that is inserted above the system status bar to show the volume indicator.
-	private let volumeWindow: UIWindow = UIWindow()
+	internal let volumeWindow: UIWindow = UIWindow()
 	
 	/// A timer that controls when the `VolumeBar` automatically hides.
 	///
@@ -171,9 +171,9 @@ public final class VolumeBar: NSObject {
 	///
 	/// On iPhone, the status bar is always hidden when the device is in landscape mode,
     /// regardless of the return value of `prefersStatusBarHidden()` for the view controller.
-	private var statusBarActuallyHidden: Bool {
+	internal var statusBarActuallyHidden: Bool {
 		get {
-			let orientation = UIApplication.shared().statusBarOrientation
+			let orientation = UIApplication.shared.statusBarOrientation
 			let phoneLandscape = UI_USER_INTERFACE_IDIOM() == .phone && (orientation == .landscapeLeft || orientation == .landscapeRight)
 			return phoneLandscape ? true : statusBarHidden
 		}
@@ -206,7 +206,7 @@ public final class VolumeBar: NSObject {
 	deinit {
 		if observingVolumeChanges {
 			AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: "outputVolume")
-			NSNotificationCenter.defaultCenter().removeObserver(self)
+			NotificationCenter.defaultCenter().removeObserver(self)
 		}
 	}
 	
@@ -217,26 +217,28 @@ public final class VolumeBar: NSObject {
 	/// Once this method is called, the `VolumeBar` will automatically show when volume buttons
 	/// are pressed as long as the application is active and `stop()` hasn't been called.
 	public func start() {
-		if !observingVolumeChanges {
-			observingVolumeChanges = true
-			
-			// Initialize the audio session
-			do {
-				try AVAudioSession.sharedInstance().setActive(true)
-			} catch {
-				print("VolumeBar: Initializing audio session failed.")
-			}
-			
-			// Observe volume changes
-			AVAudioSession.sharedInstance().addObserver(self, forKeyPath: "outputVolume", options: [.old, .new], context: nil)
-			
-			// Observe when application resumes from background
-			NotificationCenter.default.addObserver(self, selector: #selector(UIApplicationDelegate.applicationWillResignActive(_:)), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-			NotificationCenter.default.addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-			
-			// Observe device rotation
-			NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.updateHeight), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+		// Ensure we aren't already observing volume changes
+		if observingVolumeChanges {
+			return
 		}
+		observingVolumeChanges = true
+		
+		// Initialize the audio session
+		do {
+			try AVAudioSession.sharedInstance().setActive(true)
+		} catch {
+			print("VolumeBar: Initializing audio session failed.")
+		}
+		
+		// Observe volume changes
+		AVAudioSession.sharedInstance().addObserver(self, forKeyPath: "outputVolume", options: [.old, .new], context: nil)
+		
+		// Observe when application enters and resumes from background
+		NotificationCenter.default.addObserver(self, selector: #selector(UIApplicationDelegate.applicationWillResignActive(_:)), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+		
+		// Observe device rotation
+		NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.updateHeight), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
 	}
 	
 	/// Stop observing changes in volume.
@@ -259,7 +261,7 @@ public final class VolumeBar: NSObject {
 	///
 	/// See documentation for `barHeight` for details.
 	internal func updateHeight() {
-		guard let mainWindow = UIApplication.shared().keyWindow else { return }
+		guard let mainWindow = UIApplication.shared.keyWindow else { return }
 		
 		// Default to height of 20
 		var height = CGFloat(20)
@@ -267,12 +269,12 @@ public final class VolumeBar: NSObject {
 		// If iPhone in landscape mode, the root view controller of the
 		// primary window is a navigation controller, and the status bar is not
 		// hidden, set the height equal to the height of the navigation bar.
-		let orientation = UIApplication.shared().statusBarOrientation
+		let orientation = UIApplication.shared.statusBarOrientation
 		let phoneLandscape = UI_USER_INTERFACE_IDIOM() == .phone && (orientation == .landscapeLeft || orientation == .landscapeRight)
 		
 		if statusBarHidden {
 			height = barHeight + 6
-		} else if let navigationController = mainWindow.rootViewController as? UINavigationController where phoneLandscape {
+		} else if let navigationController = mainWindow.rootViewController as? UINavigationController, phoneLandscape {
 			height = navigationController.navigationBar.frame.size.height
 		}
 		
@@ -290,9 +292,7 @@ public final class VolumeBar: NSObject {
 	/// `animationDuration`, and `minimumVisibleDuration` properties of the `VolumeBar`.
 	public func show() {
 		// Only show when the application is active
-		if UIApplication.shared().applicationState != .active {
-			return
-		}
+		guard UIApplication.shared.applicationState == .active else { return }
 		
 		// Update the internal view controller before presenting
 		volumeViewController.refresh()
@@ -371,9 +371,9 @@ public final class VolumeBar: NSObject {
 	/// Observe changes in volume.
 	///
 	/// This method is called when the user presses either of the volume buttons.
-	override public func observeValue(forKeyPath keyPath: String?, of _object: AnyObject?, change _change: [NSKeyValueChangeKey : AnyObject]?, context: UnsafeMutablePointer<Void>?) {
+	public func observeValue(forKeyPath keyPath: String?, of object: AnyObject?, change: [NSKeyValueChangeKey : AnyObject]?, context: UnsafeMutableRawPointer) {
 		// Exit early if the object isn't an `AVAudioSession`.
-		guard let _ = _object as? AVAudioSession else { return }
+		guard object is AVAudioSession else { return }
 		
 		show()
 	}
@@ -407,14 +407,14 @@ private class VolumeBarViewController: UIViewController {
 	/// A reference to the associated `VolumeBar` instance.
 	///
 	/// Used to retrieve appearance properties from the `VolumeBar`.
-	private var volumeBar: VolumeBar? {
+	internal var volumeBar: VolumeBar? {
 		didSet {
 			refresh()
 		}
 	}
 	
 	// MARK: Views
-	private var trackView: UIView = UIView()
+	internal var trackView: UIView = UIView()
 	private var segmentViews: [UIView] = [UIView]()
 	
 	// MARK: - Init
@@ -422,15 +422,15 @@ private class VolumeBarViewController: UIViewController {
 		super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
 		
 		// Appearance defaults
-		view.tintColor = UIColor.black()
-		view.backgroundColor = UIColor.white()
+		view.tintColor = UIColor.black
+		view.backgroundColor = UIColor.white
 		
-		trackView.backgroundColor = UIColor.black().withAlphaComponent(0.1)
+		trackView.backgroundColor = UIColor.black.withAlphaComponent(0.1)
 		view.addSubview(trackView)
 	}
 	
 	private required init?(coder aDecoder: NSCoder) {
-		fatalError("Please use volume.sharedInstance instead of instantiating VolumeBarViewController directly.")
+		fatalError("Please use VolumeBar.sharedInstance instead of instantiating VolumeBarViewController directly.")
 	}
 	
 	// MARK: - View lifecycle
@@ -443,7 +443,7 @@ private class VolumeBarViewController: UIViewController {
 		let volumeView = MPVolumeView()
 		volumeView.clipsToBounds = true
 		volumeView.frame = CGRect.zero
-		UIApplication.shared().windows.first?.addSubview(volumeView)
+		UIApplication.shared.windows.first?.addSubview(volumeView)
 	}
 	
 	/// Performs internal layout.
@@ -471,13 +471,13 @@ private class VolumeBarViewController: UIViewController {
 	}
 	
 	/// Returns the `statusBarStyle` property of the `VolumeBar`.
-	private override func preferredStatusBarStyle() -> UIStatusBarStyle {
+	private override var preferredStatusBarStyle: UIStatusBarStyle {
 		guard let bar = volumeBar else { return .default }
 		return bar.statusBarStyle
 	}
 	
 	/// Returns the `statusBarHidden` property of the `VolumeBar`.
-	private override func prefersStatusBarHidden() -> Bool {
+	private override var prefersStatusBarHidden: Bool {
 		guard let bar = volumeBar else { return false }
 		return bar.statusBarActuallyHidden
 	}
@@ -487,7 +487,7 @@ private class VolumeBarViewController: UIViewController {
 	/// Updates the appearance and alpha of segments.
 	///
 	/// See the `segmentCount` propetitrty of `VolumeBar`.
-	private func refresh() {
+	internal func refresh() {
 		guard let bar = volumeBar else { return }
 		
 		// Update segments if necessary

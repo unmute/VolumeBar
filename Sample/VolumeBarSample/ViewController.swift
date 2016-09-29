@@ -67,8 +67,8 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 	func configureStyles() {
 		// Default style
 		styles.append(Style(name: "Default", closure: {
-			self.titleLabel.textColor = UIColor.black()
-			self.subtitleLabel.textColor = UIColor.black()
+			self.titleLabel.textColor = UIColor.black
+			self.subtitleLabel.textColor = UIColor.black
 			self.imageView.alpha = 0
 			self.segmentedControl.tintColor = self.view.tintColor
 			
@@ -79,18 +79,18 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 			VolumeBar.sharedInstance.barHeight = 2
 			VolumeBar.sharedInstance.segmentCount = 16
 			VolumeBar.sharedInstance.interitemSpacing = 0
-			VolumeBar.sharedInstance.tintColor = UIColor.black()
-			VolumeBar.sharedInstance.backgroundColor = UIColor.white()
-			VolumeBar.sharedInstance.trackTintColor = UIColor.black().withAlphaComponent(0.1)
+			VolumeBar.sharedInstance.tintColor = UIColor.black
+			VolumeBar.sharedInstance.backgroundColor = UIColor.white
+			VolumeBar.sharedInstance.trackTintColor = UIColor.black.withAlphaComponent(0.1)
 			VolumeBar.sharedInstance.statusBarHidden = false
 		}))
 		
 		// Segmented style
 		styles.append(Style(name: "Segmented", closure: {
-			self.titleLabel.textColor = UIColor.white()
-			self.subtitleLabel.textColor = UIColor.white()
+			self.titleLabel.textColor = UIColor.white
+			self.subtitleLabel.textColor = UIColor.white
 			self.imageView.alpha = 1
-			self.segmentedControl.tintColor = UIColor.white()
+			self.segmentedControl.tintColor = UIColor.white
 			
 			self.statusBarHidden = true
 			self.setNeedsStatusBarAppearanceUpdate()
@@ -99,9 +99,9 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 			VolumeBar.sharedInstance.barHeight = 5
 			VolumeBar.sharedInstance.segmentCount = 8
 			VolumeBar.sharedInstance.interitemSpacing = 3
-			VolumeBar.sharedInstance.tintColor = UIColor.white()
-			VolumeBar.sharedInstance.backgroundColor = UIColor.black().withAlphaComponent(0.5)
-			VolumeBar.sharedInstance.trackTintColor = UIColor.clear()
+			VolumeBar.sharedInstance.tintColor = UIColor.white
+			VolumeBar.sharedInstance.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+			VolumeBar.sharedInstance.trackTintColor = UIColor.clear
 			VolumeBar.sharedInstance.statusBarHidden = true
 		}))
 		
@@ -148,7 +148,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         // Dispose of any resources that can be recreated.
     }
 	
-	override func prefersStatusBarHidden() -> Bool {
+	override var prefersStatusBarHidden: Bool {
 		return statusBarHidden
 	}
 }
