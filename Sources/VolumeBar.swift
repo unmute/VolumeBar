@@ -206,7 +206,7 @@ public final class VolumeBar: NSObject {
 	deinit {
 		if observingVolumeChanges {
 			AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: "outputVolume")
-			NotificationCenter.defaultCenter().removeObserver(self)
+			NotificationCenter.default.removeObserver(self)
 		}
 	}
 	
