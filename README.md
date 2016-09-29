@@ -12,6 +12,16 @@
 
 [![Build Status](https://travis-ci.org/gizmosachin/VolumeBar.svg?branch=master)](https://travis-ci.org/gizmosachin/VolumeBar) [![Pod Version](https://img.shields.io/cocoapods/v/VolumeBar.svg?style=flat)](http://cocoadocs.org/docsets/VolumeBar/)
 
+## Version Compatibility
+
+Current Swift compatibility breakdown:
+
+| Swift Version | Framework Version |
+| ------------- | ----------------- |
+| 3.0	        | master          	|
+| 2.3	        | 1.1          		|
+| 2.2           | 1.1          		|
+
 ## Usage
 
 A basic implementation of `VolumeBar` is just one line of code.
@@ -94,10 +104,9 @@ To integrate, add the following to your `Podfile`:
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-platform :iOS, '8.0'
 use_frameworks!
 
-pod 'VolumeBar', '~> 1.1'
+pod 'VolumeBar', '~> 2.0'
 ```
 
 ### Carthage
