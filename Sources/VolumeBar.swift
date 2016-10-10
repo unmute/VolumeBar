@@ -162,6 +162,9 @@ public final class VolumeBar: NSObject {
 	/// A `UIWindow` that is inserted above the system status bar to show the volume indicator.
 	internal let volumeWindow: UIWindow = UIWindow()
 	
+	/// A standard iOS `MPVolumeView` that never appears but is necessary to hide the system volume HUD.
+	private let volumeView = MPVolumeView()
+	
 	/// A timer that controls when the `VolumeBar` automatically hides.
 	///
 	/// Each time a volume button is pressed, the timer is invalidated and set again with duration `minimumVisibleDuration`.
@@ -201,6 +204,10 @@ public final class VolumeBar: NSObject {
 		volumeWindow.backgroundColor = nil
 		volumeWindow.rootViewController = volumeViewController
 		volumeWindow.windowLevel = UIWindowLevelStatusBar + 1
+		
+		// A non-hidden MPVolumeView is needed to prevent the system volume HUD from showing.
+		volumeView.clipsToBounds = true
+		volumeView.frame = CGRect.zero
 	}
 	
 	deinit {
@@ -223,6 +230,9 @@ public final class VolumeBar: NSObject {
 		}
 		observingVolumeChanges = true
 		
+		// Add the hidden `MPVolumeView`.
+		UIApplication.shared.windows.first?.addSubview(volumeView)
+		
 		// Initialize the audio session
 		do {
 			try AVAudioSession.sharedInstance().setActive(true)
@@ -234,8 +244,8 @@ public final class VolumeBar: NSObject {
 		AVAudioSession.sharedInstance().addObserver(self, forKeyPath: "outputVolume", options: [.old, .new], context: nil)
 		
 		// Observe when application enters and resumes from background
-		NotificationCenter.default.addObserver(self, selector: #selector(UIApplicationDelegate.applicationWillResignActive(_:)), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(UIApplicationDelegate.applicationDidBecomeActive(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.applicationWillResignActive(notification:)), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.applicationDidBecomeActive(notification:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
 		
 		// Observe device rotation
 		NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.updateHeight), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
@@ -254,6 +264,9 @@ public final class VolumeBar: NSObject {
 			
 			// Stop observing application changes and device rotation
 			NotificationCenter.default.removeObserver(self)
+			
+			// Remove the hidden `MPVolumeView`.
+			volumeView.removeFromSuperview()
 		}
 	}
 	
@@ -371,13 +384,12 @@ public final class VolumeBar: NSObject {
 	/// Observe changes in volume.
 	///
 	/// This method is called when the user presses either of the volume buttons.
-	public func observeValue(forKeyPath keyPath: String?, of object: AnyObject?, change: [NSKeyValueChangeKey : AnyObject]?, context: UnsafeMutableRawPointer) {
+	public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
 		// Exit early if the object isn't an `AVAudioSession`.
 		guard object is AVAudioSession else { return }
 		
 		show()
 	}
-	
 	
 	/// Observe when the application background state changes.
 	public func applicationWillResignActive(notification: Notification) {
@@ -429,25 +441,14 @@ private class VolumeBarViewController: UIViewController {
 		view.addSubview(trackView)
 	}
 	
-	private required init?(coder aDecoder: NSCoder) {
+	fileprivate required init?(coder aDecoder: NSCoder) {
 		fatalError("Please use VolumeBar.sharedInstance instead of instantiating VolumeBarViewController directly.")
 	}
 	
 	// MARK: - View lifecycle
 	
-	/// Called when the view is loaded.
-	private override func viewDidLoad() {
-		super.viewDidLoad()
-		
-		// A non-hidden MPVolumeView is needed to prevent the system volume HUD from showing.
-		let volumeView = MPVolumeView()
-		volumeView.clipsToBounds = true
-		volumeView.frame = CGRect.zero
-		UIApplication.shared.windows.first?.addSubview(volumeView)
-	}
-	
 	/// Performs internal layout.
-	private override func viewDidLayoutSubviews() {
+	fileprivate override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 		
 		guard let bar = volumeBar else { return }
@@ -471,13 +472,13 @@ private class VolumeBarViewController: UIViewController {
 	}
 	
 	/// Returns the `statusBarStyle` property of the `VolumeBar`.
-	private override var preferredStatusBarStyle: UIStatusBarStyle {
+	fileprivate override var preferredStatusBarStyle: UIStatusBarStyle {
 		guard let bar = volumeBar else { return .default }
 		return bar.statusBarStyle
 	}
 	
 	/// Returns the `statusBarHidden` property of the `VolumeBar`.
-	private override var prefersStatusBarHidden: Bool {
+	fileprivate override var prefersStatusBarHidden: Bool {
 		guard let bar = volumeBar else { return false }
 		return bar.statusBarActuallyHidden
 	}
