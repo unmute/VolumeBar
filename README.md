@@ -51,9 +51,9 @@ VolumeBar.sharedInstance.stop()
 Customize tint color, bar tint color, and track tint color:
 
 ```swift
-VolumeBar.sharedInstance.tintColor = UIColor.whiteColor()
-VolumeBar.sharedInstance.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.5)
-VolumeBar.sharedInstance.trackTintColor = UIColor.clearColor()
+VolumeBar.sharedInstance.tintColor = UIColor.white
+VolumeBar.sharedInstance.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+VolumeBar.sharedInstance.trackTintColor = UIColor.clear
 ```
 
 Customize layout properties:
@@ -91,7 +91,7 @@ VolumeBar.sharedInstance.minimumVisibleDuration = 2.0
 
 ```swift
 VolumeBar.sharedInstance.statusBarHidden = false
-VolumeBar.sharedInstance.statusBarStyle = .LightContent
+VolumeBar.sharedInstance.statusBarStyle = .lightContent
 ```
 
 ## Installation
