@@ -25,7 +25,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 	}
 	var styles: [Style]
 	
-	override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+	override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
 		titleLabel = UILabel()
 		subtitleLabel = UILabel()
 		segmentedControl = UISegmentedControl()
@@ -42,22 +42,22 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 	}
 	
 	func commonInit() {
-		imageView.contentMode = .ScaleAspectFill
+		imageView.contentMode = .scaleAspectFill
 		view.addSubview(imageView)
 		
 		titleLabel.text = "VolumeBar"
-		titleLabel.font = UIFont.systemFontOfSize(40, weight: UIFontWeightMedium)
-		titleLabel.textAlignment = .Center
+		titleLabel.font = UIFont.systemFont(ofSize: 40, weight: UIFontWeightMedium)
+		titleLabel.textAlignment = .center
 		view.addSubview(titleLabel)
 		
 		subtitleLabel.text = "Press either volume button to view."
-		subtitleLabel.font = UIFont.systemFontOfSize(17, weight: UIFontWeightRegular)
+		subtitleLabel.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
 		subtitleLabel.numberOfLines = 2
-		subtitleLabel.textAlignment = .Center
+		subtitleLabel.textAlignment = .center
 		view.addSubview(subtitleLabel)
 		
 		configureStyles()
-		segmentedControl.addTarget(self, action: #selector(ViewController.update), forControlEvents: .ValueChanged)
+		segmentedControl.addTarget(self, action: #selector(ViewController.update), for: .valueChanged)
 		segmentedControl.selectedSegmentIndex = 0
 		view.addSubview(segmentedControl)
 		
@@ -67,47 +67,47 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 	func configureStyles() {
 		// Default style
 		styles.append(Style(name: "Default", closure: {
-			self.titleLabel.textColor = UIColor.blackColor()
-			self.subtitleLabel.textColor = UIColor.blackColor()
+			self.titleLabel.textColor = UIColor.black
+			self.subtitleLabel.textColor = UIColor.black
 			self.imageView.alpha = 0
 			self.segmentedControl.tintColor = self.view.tintColor
 			
 			self.statusBarHidden = false
 			self.setNeedsStatusBarAppearanceUpdate()
 			
-			VolumeBar.sharedInstance.animationStyle = .Slide
+			VolumeBar.sharedInstance.animationStyle = .slide
 			VolumeBar.sharedInstance.barHeight = 2
 			VolumeBar.sharedInstance.segmentCount = 16
 			VolumeBar.sharedInstance.interitemSpacing = 0
-			VolumeBar.sharedInstance.tintColor = UIColor.blackColor()
-			VolumeBar.sharedInstance.backgroundColor = UIColor.whiteColor()
-			VolumeBar.sharedInstance.trackTintColor = UIColor.blackColor().colorWithAlphaComponent(0.1)
+			VolumeBar.sharedInstance.tintColor = UIColor.black
+			VolumeBar.sharedInstance.backgroundColor = UIColor.white
+			VolumeBar.sharedInstance.trackTintColor = UIColor.black.withAlphaComponent(0.1)
 			VolumeBar.sharedInstance.statusBarHidden = false
 		}))
 		
 		// Segmented style
 		styles.append(Style(name: "Segmented", closure: {
-			self.titleLabel.textColor = UIColor.whiteColor()
-			self.subtitleLabel.textColor = UIColor.whiteColor()
+			self.titleLabel.textColor = UIColor.white
+			self.subtitleLabel.textColor = UIColor.white
 			self.imageView.alpha = 1
-			self.segmentedControl.tintColor = UIColor.whiteColor()
+			self.segmentedControl.tintColor = UIColor.white
 			
 			self.statusBarHidden = true
 			self.setNeedsStatusBarAppearanceUpdate()
 			
-			VolumeBar.sharedInstance.animationStyle = .Fade
+			VolumeBar.sharedInstance.animationStyle = .fade
 			VolumeBar.sharedInstance.barHeight = 5
 			VolumeBar.sharedInstance.segmentCount = 8
 			VolumeBar.sharedInstance.interitemSpacing = 3
-			VolumeBar.sharedInstance.tintColor = UIColor.whiteColor()
-			VolumeBar.sharedInstance.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.5)
-			VolumeBar.sharedInstance.trackTintColor = UIColor.clearColor()
+			VolumeBar.sharedInstance.tintColor = UIColor.white
+			VolumeBar.sharedInstance.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+			VolumeBar.sharedInstance.trackTintColor = UIColor.clear
 			VolumeBar.sharedInstance.statusBarHidden = true
 		}))
 		
 		// Add a segment for each style
-		for (index, style) in styles.enumerate() {
-			segmentedControl.insertSegmentWithTitle(style.name, atIndex: index, animated: false)
+		for (index, style) in styles.enumerated() {
+			segmentedControl.insertSegment(withTitle: style.name, at: index, animated: false)
 		}
 	}
 
@@ -148,7 +148,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         // Dispose of any resources that can be recreated.
     }
 	
-	override func prefersStatusBarHidden() -> Bool {
+	override var prefersStatusBarHidden: Bool {
 		return statusBarHidden
 	}
 }
