@@ -83,13 +83,15 @@ public final class VolumeBar: NSObject {
 	/// The height of the internal bar.
 	///
 	/// See `updateHeight()`. The height of the `VolumeBar` is set as follows:
-	/// ### In portrait mode:
+	/// ## In portrait mode:
 	/// - If `statusBarHidden` = `false`: 20
 	/// - If `statusBarHidden` = `true` : `barHeight` + 6
 	///
-	/// ### In landscape mode:
+	/// ## In landscape mode:
 	/// - If the `rootViewController` of the key window is a `UINavigationController`: the height of the navigation bar
 	/// - Otherwise: `barHeight` + 6
+	///
+	/// - seealso: `updateHeight(:)`
 	public var barHeight: CGFloat = 2.0 {
 		didSet {
 			updateHeight()
@@ -107,9 +109,9 @@ public final class VolumeBar: NSObject {
 	
 	/// A Boolean value indicating whether the status bar on the current view controller is hidden.
 	///
-	/// Update this value on each view controller where `prefersStatusBarHidden()` is overridden.
+	/// Important: Update this value on each view controller where `prefersStatusBarHidden()` is overridden.
 	/// Not updating this value appropriately will result in presentation glitches for `VolumeBar`.
-	public var statusBarHidden: Bool = false{
+	public var statusBarHidden: Bool = false {
 		didSet {
 			updateHeight()
 		}
@@ -170,7 +172,7 @@ public final class VolumeBar: NSObject {
 	/// Each time a volume button is pressed, the timer is invalidated and set again with duration `minimumVisibleDuration`.
 	private var hideTimer: Timer?
 	
-	/// A Boolean value that reflects whether the status bar should actually be hidden.
+	/// A Bool that reflects whether the status bar should actually be hidden.
 	///
 	/// On iPhone, the status bar is always hidden when the device is in landscape mode,
     /// regardless of the return value of `prefersStatusBarHidden()` for the view controller.
@@ -272,7 +274,7 @@ public final class VolumeBar: NSObject {
 	
 	/// Updates the height of the `VolumeBar` according to the `barHeight` and other factors.
 	///
-	/// See documentation for `barHeight` for details.
+	/// - seealso: `barHeight`
 	internal func updateHeight() {
 		guard let mainWindow = UIApplication.shared.keyWindow else { return }
 		
@@ -487,7 +489,7 @@ private class VolumeBarViewController: UIViewController {
 	
 	/// Updates the appearance and alpha of segments.
 	///
-	/// See the `segmentCount` propetitrty of `VolumeBar`.
+	/// - seealso: `segmentCount`
 	internal func refresh() {
 		guard let bar = volumeBar else { return }
 		
