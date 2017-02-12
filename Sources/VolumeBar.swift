@@ -210,6 +210,8 @@ public final class VolumeBar: NSObject {
 		// A non-hidden MPVolumeView is needed to prevent the system volume HUD from showing.
 		volumeView.clipsToBounds = true
 		volumeView.frame = CGRect.zero
+		volumeView.showsRouteButton = false
+		volumeView.isUserInteractionEnabled = false
 	}
 	
 	deinit {

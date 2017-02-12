@@ -106,7 +106,7 @@ To integrate, add the following to your `Podfile`:
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
-pod 'VolumeBar', '~> 2.0.1'
+pod 'VolumeBar', '~> 2.0.2'
 ```
 
 ### Carthage
