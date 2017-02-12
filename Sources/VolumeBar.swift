@@ -262,8 +262,8 @@ public final class VolumeBar: NSObject {
 			// Stop observing volume changes
 			AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: "outputVolume")
 			
-			// Stop observing application changes and device rotation
-			NotificationCenter.default.removeObserver(self)
+			// Stop observing device rotation
+			NotificationCenter.default.removeObserver(self, name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
 			
 			// Remove the hidden `MPVolumeView`.
 			volumeView.removeFromSuperview()
