@@ -190,6 +190,8 @@ public final class VolumeBar: NSObject {
 	/// Pressing either volume button changes volume by 0.0625 (experimentally determined constant).
 	fileprivate static let volumeStep = 0.0625
 	
+    fileprivate static let AVAudioSessionOutputVolumeKey = "outputVolume"
+    
 	// MARK: - Init
 	
 	/// Creates a new instance of `VolumeBar`.
@@ -214,14 +216,14 @@ public final class VolumeBar: NSObject {
 	}
 	
 	deinit {
-		if observingVolumeChanges {
-			AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: "outputVolume")
-			NotificationCenter.default.removeObserver(self)
-		}
+		self.removeVolumeBarObservers()
 	}
-	
-	// MARK: - Automatic Presentation
-	
+}
+
+// MARK: - Automatic Presentation
+
+extension VolumeBar {
+    
 	/// Start observing changes in volume.
 	///
 	/// Once this method is called, the `VolumeBar` will automatically show when volume buttons
@@ -243,15 +245,7 @@ public final class VolumeBar: NSObject {
 			print("VolumeBar: Initializing audio session failed.")
 		}
 		
-		// Observe volume changes
-		AVAudioSession.sharedInstance().addObserver(self, forKeyPath: "outputVolume", options: [.old, .new], context: nil)
-		
-		// Observe when application enters and resumes from background
-		NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.applicationWillResignActive(notification:)), name: Notification.Name.UIApplicationWillResignActive, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.applicationDidBecomeActive(notification:)), name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
-		
-		// Observe device rotation
-		NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.updateHeight), name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
+        self.addVolumeBarObservers()
 	}
 	
 	/// Stop observing changes in volume.
@@ -262,11 +256,7 @@ public final class VolumeBar: NSObject {
 		if observingVolumeChanges {
 			observingVolumeChanges = false
 			
-			// Stop observing volume changes
-			AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: "outputVolume")
-			
-			// Stop observing device rotation
-			NotificationCenter.default.removeObserver(self, name: Notification.Name.UIDeviceOrientationDidChange, object: nil)
+            self.removeVolumeBarObservers()
 			
 			// Remove the hidden `MPVolumeView`.
 			volumeView.removeFromSuperview()
@@ -381,9 +371,36 @@ public final class VolumeBar: NSObject {
 			}
 		}
 	}
-	
-	// MARK: - Observer callbacks
-	
+}
+
+// MARK: - Observer callbacks
+
+extension VolumeBar {
+    
+    internal func addVolumeBarObservers() {
+        // Observe volume changes
+        AVAudioSession.sharedInstance().addObserver(self, forKeyPath: VolumeBar.AVAudioSessionOutputVolumeKey, options: [.old, .new], context: nil)
+        
+        // Observe when application enters and resumes from background
+        NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.applicationWillResignActive(notification:)), name: .UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.applicationDidBecomeActive(notification:)), name: .UIApplicationDidBecomeActive, object: nil)
+        
+        // Observe device rotation
+        NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.updateHeight), name: .UIDeviceOrientationDidChange, object: nil)
+    }
+    
+    internal func removeVolumeBarObservers() {
+        // Stop observing volume changes
+        AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: VolumeBar.AVAudioSessionOutputVolumeKey)
+
+        // Remove suspend/resume observers
+        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIApplicationDidBecomeActive, object: nil)
+        
+        // Stop observing device rotation
+        NotificationCenter.default.removeObserver(self, name: .UIDeviceOrientationDidChange, object: nil)
+    }
+    
 	/// Observe changes in volume.
 	///
 	/// This method is called when the user presses either of the volume buttons.
