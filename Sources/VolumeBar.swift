@@ -156,27 +156,27 @@ public final class VolumeBar: NSObject {
 	// MARK: Internal
 	
 	/// A Boolean value that reflects whether the `VolumeBar` should resume when the app enters from the background.
-	private var shouldResume: Bool = false
+	fileprivate var shouldResume: Bool = false
 	
 	/// A Boolean value that reflects whether the `VolumeBar` is currently observing system volume changes.
-	private var observingVolumeChanges: Bool = false
+	fileprivate var observingVolumeChanges: Bool = false
 	
 	/// A `UIWindow` that is inserted above the system status bar to show the volume indicator.
-	internal let volumeWindow: UIWindow = UIWindow()
+	fileprivate let volumeWindow: UIWindow = UIWindow()
 	
 	/// A standard iOS `MPVolumeView` that never appears but is necessary to hide the system volume HUD.
-	private let volumeView = MPVolumeView()
+    fileprivate let volumeView = MPVolumeView(frame: .zero)
 	
 	/// A timer that controls when the `VolumeBar` automatically hides.
 	///
 	/// Each time a volume button is pressed, the timer is invalidated and set again with duration `minimumVisibleDuration`.
-	private var hideTimer: Timer?
+	fileprivate var hideTimer: Timer?
 	
 	/// A Bool that reflects whether the status bar should actually be hidden.
 	///
 	/// On iPhone, the status bar is always hidden when the device is in landscape mode,
     /// regardless of the return value of `prefersStatusBarHidden()` for the view controller.
-	internal var statusBarActuallyHidden: Bool {
+	fileprivate var statusBarActuallyHidden: Bool {
 		get {
 			let orientation = UIApplication.shared.statusBarOrientation
 			let phoneLandscape = UI_USER_INTERFACE_IDIOM() == .phone && (orientation == .landscapeLeft || orientation == .landscapeRight)
@@ -185,10 +185,10 @@ public final class VolumeBar: NSObject {
 	}
 
 	/// The internal view controller used to show the current system volume.
-	private var volumeViewController: VolumeBarViewController = VolumeBarViewController()
+	fileprivate var volumeViewController: VolumeBarViewController = VolumeBarViewController()
 	
 	/// Pressing either volume button changes volume by 0.0625 (experimentally determined constant).
-	static let volumeStep = 0.0625
+	fileprivate static let volumeStep = 0.0625
 	
 	// MARK: - Init
 	
@@ -209,7 +209,6 @@ public final class VolumeBar: NSObject {
 		
 		// A non-hidden MPVolumeView is needed to prevent the system volume HUD from showing.
 		volumeView.clipsToBounds = true
-		volumeView.frame = CGRect.zero
 		volumeView.showsRouteButton = false
 		volumeView.isUserInteractionEnabled = false
 	}
@@ -417,7 +416,8 @@ public final class VolumeBar: NSObject {
 	}
 }
 
-// MARK: -
+// MARK: - VolumeBarViewController
+
 /// The internal view controller used by `VolumeBar`.
 private class VolumeBarViewController: UIViewController {
 	/// A reference to the associated `VolumeBar` instance.
