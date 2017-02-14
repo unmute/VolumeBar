@@ -43,8 +43,8 @@ public protocol VolumeDelegate {
 	func volumeBarDidHide(_ volumeBar: VolumeBar)
 }
 
-/// The main VolumeBar class.
-public final class VolumeBar: NSObject {
+/// VolumeBar, volume indicator that doesn't obstruct content.
+public final class VolumeBar: UIViewController {
 	/// A set of animation styles.
 	public enum AnimationStyle {
 		/// Slide in and out of view from the top of the screen.
