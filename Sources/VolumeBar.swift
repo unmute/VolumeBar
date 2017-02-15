@@ -217,8 +217,10 @@ public final class VolumeBar: NSObject {
 		volumeWindow.rootViewController = volumeViewController
 		
 		// A non-hidden MPVolumeView is needed to prevent the system volume HUD from showing.
+		volumeView.isHidden = true
 		volumeView.clipsToBounds = true
 		volumeView.showsRouteButton = false
+		volumeWindow.addSubview(volumeView)
 	}
 	
 	deinit {
@@ -241,9 +243,9 @@ extension VolumeBar {
 		}
 		observingVolumeChanges = true
 		
-		// Add the hidden `MPVolumeView`.
-		volumeWindow.addSubview(volumeView)
-		
+		// Set `volumeView` to non-hidden so the system volume HUD doesn't show
+		volumeView.isHidden = false
+
 		// Initialize the audio session
 		do {
 			try AVAudioSession.sharedInstance().setActive(true)
@@ -262,10 +264,10 @@ extension VolumeBar {
 		if observingVolumeChanges {
 			observingVolumeChanges = false
 			
-			removeVolumeBarObservers()
+			// Set `volumeView` to hidden, allowing the system HUD to show again
+			volumeView.isHidden = true
 			
-			// Remove the hidden `MPVolumeView`.
-			volumeView.removeFromSuperview()
+			removeVolumeBarObservers()
 		}
 	}
 	
