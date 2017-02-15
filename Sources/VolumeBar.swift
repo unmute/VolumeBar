@@ -172,6 +172,13 @@ public final class VolumeBar: NSObject {
 	/// Each time a volume button is pressed, the timer is invalidated and set again with duration `minimumVisibleDuration`.
 	fileprivate var hideTimer: Timer?
 	
+	/// A Bool representing whether or not the volume bar is showing.
+	fileprivate var isHidden: Bool = true {
+		didSet {
+			volumeWindow.windowLevel = isHidden ? UIWindowLevelNormal : UIWindowLevelStatusBar + 1
+		}
+	}
+	
 	/// A Bool that reflects whether the status bar should actually be hidden.
 	///
 	/// On iPhone, the status bar is always hidden when the device is in landscape mode,
@@ -204,15 +211,14 @@ public final class VolumeBar: NSObject {
 		
 		// Update the window height and configure the window
 		updateHeight()
-		volumeWindow.isHidden = true
+		volumeWindow.isHidden = false
+		volumeWindow.isUserInteractionEnabled = false
 		volumeWindow.backgroundColor = nil
 		volumeWindow.rootViewController = volumeViewController
-		volumeWindow.windowLevel = UIWindowLevelStatusBar + 1
 		
 		// A non-hidden MPVolumeView is needed to prevent the system volume HUD from showing.
 		volumeView.clipsToBounds = true
 		volumeView.showsRouteButton = false
-		volumeView.isUserInteractionEnabled = false
 	}
 	
 	deinit {
@@ -236,7 +242,7 @@ extension VolumeBar {
 		observingVolumeChanges = true
 		
 		// Add the hidden `MPVolumeView`.
-		UIApplication.shared.windows.first?.addSubview(volumeView)
+		volumeWindow.addSubview(volumeView)
 		
 		// Initialize the audio session
 		do {
@@ -306,11 +312,10 @@ extension VolumeBar {
 		var hideDuration = minimumVisibleDuration
 		
 		// Only show the `volumeWindow` if not already showing
-		if volumeWindow.isHidden {
+		if isHidden {
 			// Show the window
-			volumeWindow.makeKeyAndVisible()
-			volumeWindow.isHidden = false
-			
+			isHidden = false
+		
 			// Call the delegate method
 			delegate?.volumeBarWillShow(self)
 			
@@ -357,7 +362,7 @@ extension VolumeBar {
 			default: break
 			}
 		}) { (completed) in
-			self.volumeWindow.isHidden = true
+			self.isHidden = true
 			self.delegate?.volumeBarDidHide(self)
 			self.volumeViewController.view.transform = .identity
 		}
