@@ -441,14 +441,14 @@ private class VolumeBarViewController: UIViewController {
 	/// A reference to the associated `VolumeBar` instance.
 	///
 	/// Used to retrieve appearance properties from the `VolumeBar`.
-	internal var volumeBar: VolumeBar? {
+	fileprivate weak var volumeBar: VolumeBar? {
 		didSet {
 			refresh()
 		}
 	}
 	
 	// MARK: Views
-	internal var trackView: UIView = UIView()
+	fileprivate var trackView: UIView = UIView()
 	private var segmentViews: [UIView] = [UIView]()
 	
 	// MARK: - Init
@@ -510,7 +510,7 @@ private class VolumeBarViewController: UIViewController {
 	/// Updates the appearance and alpha of segments.
 	///
 	/// - seealso: `segmentCount`
-	internal func refresh() {
+	fileprivate func refresh() {
 		guard let bar = volumeBar else { return }
 		
 		// Update segments if necessary
