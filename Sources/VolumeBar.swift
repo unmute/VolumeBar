@@ -315,12 +315,11 @@ extension VolumeBar {
 			delegate?.volumeBarWillShow(self)
 			
 			// Set up for animation
+			volumeViewController.view.alpha = 0.0
 			switch animationStyle {
-			case .fade:
-				volumeViewController.view.alpha = 0.0
 			case .slide:
-				volumeViewController.view.alpha = 0.0
 				volumeViewController.view.transform = CGAffineTransform(translationX: 0, y: -volumeWindow.bounds.height)
+			default: break
 			}
 			
 			// If style is `.Fade`, show instantly
@@ -331,12 +330,11 @@ extension VolumeBar {
 			
 			// Perform animation
 			UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState], animations: { 
+				self.volumeViewController.view.alpha = 1.0
 				switch self.animationStyle {
-				case .fade:
-					self.volumeViewController.view.alpha = 1.0
 				case .slide:
-					self.volumeViewController.view.alpha = 1.0
-					self.volumeViewController.view.transform = CGAffineTransform.identity
+					self.volumeViewController.view.transform = .identity
+				default: break
 				}
 			}, completion: nil)
 		}
@@ -352,23 +350,16 @@ extension VolumeBar {
 	/// `animationDuration`, and `minimumVisibleDuration` properties of the `VolumeBar`.
 	public func hide() {
 		UIView.animate(withDuration: animationDuration, delay: 0, options: [.beginFromCurrentState], animations: {
+			self.volumeViewController.view.alpha = 0.0
 			switch self.animationStyle {
-			case .fade:
-				self.volumeViewController.view.alpha = 0.0
 			case .slide:
-				self.volumeViewController.view.alpha = 0.0
 				self.volumeViewController.view.transform = CGAffineTransform(translationX: 0, y: -self.volumeWindow.bounds.height)
+			default: break
 			}
 		}) { (completed) in
 			self.volumeWindow.isHidden = true
 			self.delegate?.volumeBarDidHide(self)
-			switch self.animationStyle {
-			case .fade:
-				self.volumeViewController.view.alpha = 1.0
-			case .slide:
-				self.volumeViewController.view.alpha = 1.0
-				self.volumeViewController.view.transform = CGAffineTransform.identity
-			}
+			self.volumeViewController.view.transform = .identity
 		}
 	}
 }
