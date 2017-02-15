@@ -44,7 +44,7 @@ public protocol VolumeDelegate {
 }
 
 /// VolumeBar, volume indicator that doesn't obstruct content.
-public final class VolumeBar: UIViewController {
+public final class VolumeBar: NSObject {
 	/// A set of animation styles.
 	public enum AnimationStyle {
 		/// Slide in and out of view from the top of the screen.
