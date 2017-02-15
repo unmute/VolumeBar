@@ -165,7 +165,7 @@ public final class VolumeBar: NSObject {
 	fileprivate let volumeWindow: UIWindow = UIWindow()
 	
 	/// A standard iOS `MPVolumeView` that never appears but is necessary to hide the system volume HUD.
-    fileprivate let volumeView = MPVolumeView(frame: .zero)
+	fileprivate let volumeView = MPVolumeView(frame: .zero)
 	
 	/// A timer that controls when the `VolumeBar` automatically hides.
 	///
@@ -175,7 +175,7 @@ public final class VolumeBar: NSObject {
 	/// A Bool that reflects whether the status bar should actually be hidden.
 	///
 	/// On iPhone, the status bar is always hidden when the device is in landscape mode,
-    /// regardless of the return value of `prefersStatusBarHidden()` for the view controller.
+	/// regardless of the return value of `prefersStatusBarHidden()` for the view controller.
 	fileprivate var statusBarActuallyHidden: Bool {
 		get {
 			let orientation = UIApplication.shared.statusBarOrientation
@@ -190,8 +190,8 @@ public final class VolumeBar: NSObject {
 	/// Pressing either volume button changes volume by 0.0625 (experimentally determined constant).
 	fileprivate static let volumeStep = 0.0625
 	
-    fileprivate static let AVAudioSessionOutputVolumeKey = "outputVolume"
-    
+	fileprivate static let AVAudioSessionOutputVolumeKey = "outputVolume"
+	
 	// MARK: - Init
 	
 	/// Creates a new instance of `VolumeBar`.
@@ -222,9 +222,8 @@ public final class VolumeBar: NSObject {
 }
 
 // MARK: - Automatic Presentation
-
 extension VolumeBar {
-    
+	
 	/// Start observing changes in volume.
 	///
 	/// Once this method is called, the `VolumeBar` will automatically show when volume buttons
@@ -246,7 +245,7 @@ extension VolumeBar {
 			print("VolumeBar: Initializing audio session failed.")
 		}
 		
-        self.addVolumeBarObservers()
+		self.addVolumeBarObservers()
 	}
 	
 	/// Stop observing changes in volume.
@@ -257,7 +256,7 @@ extension VolumeBar {
 		if observingVolumeChanges {
 			observingVolumeChanges = false
 			
-            removeVolumeBarObservers()
+			removeVolumeBarObservers()
 			
 			// Remove the hidden `MPVolumeView`.
 			volumeView.removeFromSuperview()
@@ -377,25 +376,25 @@ extension VolumeBar {
 // MARK: - Observer callbacks
 
 extension VolumeBar {
-    fileprivate func addVolumeBarObservers() {
-        // Observe volume changes
-        AVAudioSession.sharedInstance().addObserver(self, forKeyPath: VolumeBar.AVAudioSessionOutputVolumeKey, options: [.old, .new], context: nil)
-        
-        // Observe when application enters and resumes from background
-        NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.applicationWillResignActive(notification:)), name: .UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.applicationDidBecomeActive(notification:)), name: .UIApplicationDidBecomeActive, object: nil)
-        
-        // Observe device rotation
-        NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.updateHeight), name: .UIDeviceOrientationDidChange, object: nil)
-    }
-    
-    fileprivate func removeVolumeBarObservers() {
-        // Stop observing volume changes
-        AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: VolumeBar.AVAudioSessionOutputVolumeKey)
-        
-        // Stop observing device rotation
-        NotificationCenter.default.removeObserver(self, name: .UIDeviceOrientationDidChange, object: nil)
-    }
+	fileprivate func addVolumeBarObservers() {
+		// Observe volume changes
+		AVAudioSession.sharedInstance().addObserver(self, forKeyPath: VolumeBar.AVAudioSessionOutputVolumeKey, options: [.old, .new], context: nil)
+		
+		// Observe when application enters and resumes from background
+		NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.applicationWillResignActive(notification:)), name: .UIApplicationWillResignActive, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.applicationDidBecomeActive(notification:)), name: .UIApplicationDidBecomeActive, object: nil)
+		
+		// Observe device rotation
+		NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.updateHeight), name: .UIDeviceOrientationDidChange, object: nil)
+	}
+	
+	fileprivate func removeVolumeBarObservers() {
+		// Stop observing volume changes
+		AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: VolumeBar.AVAudioSessionOutputVolumeKey)
+		
+		// Stop observing device rotation
+		NotificationCenter.default.removeObserver(self, name: .UIDeviceOrientationDidChange, object: nil)
+	}
 	
 	fileprivate func removeVolumeBarAppObservers() {
 		// Remove suspend/resume observers
