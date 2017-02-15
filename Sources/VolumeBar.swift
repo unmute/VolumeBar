@@ -216,7 +216,8 @@ public final class VolumeBar: NSObject {
 	}
 	
 	deinit {
-		self.removeVolumeBarObservers()
+		removeVolumeBarObservers()
+		removeVolumeBarAppObservers()
 	}
 }
 
@@ -256,7 +257,7 @@ extension VolumeBar {
 		if observingVolumeChanges {
 			observingVolumeChanges = false
 			
-            self.removeVolumeBarObservers()
+            removeVolumeBarObservers()
 			
 			// Remove the hidden `MPVolumeView`.
 			volumeView.removeFromSuperview()
@@ -376,8 +377,7 @@ extension VolumeBar {
 // MARK: - Observer callbacks
 
 extension VolumeBar {
-    
-    internal func addVolumeBarObservers() {
+    fileprivate func addVolumeBarObservers() {
         // Observe volume changes
         AVAudioSession.sharedInstance().addObserver(self, forKeyPath: VolumeBar.AVAudioSessionOutputVolumeKey, options: [.old, .new], context: nil)
         
@@ -389,18 +389,20 @@ extension VolumeBar {
         NotificationCenter.default.addObserver(self, selector: #selector(VolumeBar.updateHeight), name: .UIDeviceOrientationDidChange, object: nil)
     }
     
-    internal func removeVolumeBarObservers() {
+    fileprivate func removeVolumeBarObservers() {
         // Stop observing volume changes
         AVAudioSession.sharedInstance().removeObserver(self, forKeyPath: VolumeBar.AVAudioSessionOutputVolumeKey)
-
-        // Remove suspend/resume observers
-        NotificationCenter.default.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .UIApplicationDidBecomeActive, object: nil)
         
         // Stop observing device rotation
         NotificationCenter.default.removeObserver(self, name: .UIDeviceOrientationDidChange, object: nil)
     }
-    
+	
+	fileprivate func removeVolumeBarAppObservers() {
+		// Remove suspend/resume observers
+		NotificationCenter.default.removeObserver(self, name: .UIApplicationWillResignActive, object: nil)
+		NotificationCenter.default.removeObserver(self, name: .UIApplicationDidBecomeActive, object: nil)
+	}
+	
 	/// Observe changes in volume.
 	///
 	/// This method is called when the user presses either of the volume buttons.
