@@ -252,7 +252,10 @@ extension VolumeBar {
 		} catch {
 			print("VolumeBar: Initializing audio session failed.")
 		}
-		
+
+        self.volumeViewController.view.alpha = 0.0
+        self.isHidden = true
+        self.volumeViewController.view.transform = .identity
 		self.addVolumeBarObservers()
 	}
 	
@@ -405,8 +408,8 @@ extension VolumeBar {
 	/// This method is called when the user presses either of the volume buttons.
 	public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
 		// Exit early if the object isn't an `AVAudioSession`.
-		guard object is AVAudioSession else { return }
-		
+        guard let audioSession = object as? AVAudioSession, audioSession.category != AVAudioSessionCategoryPlayAndRecord else { return }
+
 		show()
 	}
 	
