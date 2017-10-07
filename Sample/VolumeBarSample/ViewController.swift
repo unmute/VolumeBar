@@ -46,12 +46,12 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 		view.addSubview(imageView)
 		
 		titleLabel.text = "VolumeBar"
-		titleLabel.font = UIFont.systemFont(ofSize: 40, weight: UIFontWeightMedium)
+		titleLabel.font = UIFont.systemFont(ofSize: 40, weight: UIFont.Weight.medium)
 		titleLabel.textAlignment = .center
 		view.addSubview(titleLabel)
 		
 		subtitleLabel.text = "Press either volume button to view."
-		subtitleLabel.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightRegular)
+		subtitleLabel.font = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.regular)
 		subtitleLabel.numberOfLines = 2
 		subtitleLabel.textAlignment = .center
 		view.addSubview(subtitleLabel)
@@ -112,7 +112,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 	}
 
 	// MARK: -
-	func update() {
+	@objc func update() {
 		let selected = segmentedControl.selectedSegmentIndex
 		if selected < 0 || selected >= styles.count { return }
 		styles[segmentedControl.selectedSegmentIndex].closure()

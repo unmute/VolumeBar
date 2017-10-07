@@ -277,7 +277,7 @@ extension VolumeBar {
 	/// Updates the height of the `VolumeBar` according to the `barHeight` and other factors.
 	///
 	/// - seealso: `barHeight`
-	internal func updateHeight() {
+	@objc internal func updateHeight() {
 		guard let mainWindow = UIApplication.shared.keyWindow else { return }
 		
 		// Default to height of 20
@@ -358,7 +358,7 @@ extension VolumeBar {
 	///
 	/// The presentation of the `VolumeBar` can be customized by setting the `animationStyle`,
 	/// `animationDuration`, and `minimumVisibleDuration` properties of the `VolumeBar`.
-	public func hide() {
+	@objc public func hide() {
 		UIView.animate(withDuration: animationDuration, delay: 0, options: [.beginFromCurrentState], animations: {
 			self.volumeViewController.view.alpha = 0.0
 			switch self.animationStyle {
@@ -414,7 +414,7 @@ extension VolumeBar {
 	}
 	
 	/// Observe when the application background state changes.
-	public func applicationWillResignActive(notification: Notification) {
+	@objc public func applicationWillResignActive(notification: Notification) {
 		// Stop session when entering background
 		if observingVolumeChanges {
 			// Set flag to only resume if `start()` was previously called
@@ -424,7 +424,7 @@ extension VolumeBar {
 		}
 	}
 	
-	public func applicationDidBecomeActive(notification: Notification) {
+	@objc public func applicationDidBecomeActive(notification: Notification) {
 		// Restart session after becoming active
 		if shouldResume {
 			// Reset background flag
