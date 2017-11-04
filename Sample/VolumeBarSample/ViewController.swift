@@ -133,7 +133,11 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 		super.viewDidLayoutSubviews()
 		
 		let labelMargin = CGFloat(20)
-		let controlMargin = CGFloat(20)
+		var controlMargin = CGFloat(20)
+		
+		if #available(iOS 11.0, *) {
+			controlMargin += view.safeAreaInsets.bottom
+		}
 		
 		let titleHeight = CGFloat(40)
 		let subtitleHeight = CGFloat(30)
